@@ -129,3 +129,60 @@
     padding: 4px 8px;
     outline: none;
 }
+
+
+.loading .employeeImg::before,
+.loading .member__icons::before,
+.loading .member__name::before,
+.loading .member__position::before,
+.loading .member__email::before,
+.loading .member__btn button::before {
+    background-color: #ddd;
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.employeeImg,
+.member__icons,
+.member__name,
+.member__position,
+.member__email,
+.member__btn {
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+.loading .employeeImg::after,
+.loading .member__icons::after,
+.loading .member__name::after,
+.loading .member__position::after,
+.loading .member__email::after,
+.loading .member__btn button::after {
+    background: linear-gradient(to right, #ddd, #fff 30%, #ddd);
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    animation: skeleton 1.5s linear 0.1s infinite;
+}
+
+
+@keyframes skeleton {
+    from {
+        left: 0%;
+    }
+
+    to {
+        left: 100%;
+    }
+}

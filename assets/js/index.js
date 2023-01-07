@@ -2,6 +2,7 @@ import { EMPLOYEES } from '../data/data.js'
 
 const listEmployees = structuredClone(EMPLOYEES);
 let listRender = [];
+let isSkeleton = true;
 const selectPerPage = document.querySelector('.selectPerPage');
 const getPerPage = () => {
     return selectPerPage.value;
@@ -26,11 +27,11 @@ const render = (arr) => {
         const firstWord = employeeName[employeeName.length - 1].slice(0, 1);
         member.innerHTML = (
             `
-                            <div class="member__image">
+                            <div class="member__image ">
                                 <div class="member__avatar">
-                                    <div class = 'employeeImg'>${firstWord}</div>
+                                    <div class = 'employeeImg '>${firstWord}</div>
                                 </div>
-                                <div class="member__icons">
+                                <div class="member__icons ">
                                     <div class="member__icons-left" title="Messages">
                                         <i class="fa-solid fa-comments"></i>
                                         <span>20</span>
@@ -41,15 +42,15 @@ const render = (arr) => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="member__detail">
+                            <div class="member__detail ">
                                 <div class="member__info">
-                                    <div class="member__name">
+                                    <div class="member__name ">
                                         <p>${employee.name}</p>
                                     </div>
-                                    <div class="member__position">
+                                    <div class="member__position ">
                                         <li>${employee.job}</li>
                                     </div>
-                                    <div class="member__email">
+                                    <div class="member__email ">
                                         <div class="member__email-icon">
                                             <i class="fa-solid fa-envelope"></i>
                                         </div>
@@ -64,6 +65,12 @@ const render = (arr) => {
         )
         memberList.append(member);
     })
+
+    if (isSkeleton) {
+        setTimeout(() => {
+            document.querySelector('.content__right__member-list').classList.remove('loading')
+        }, 1000)
+    }
 }
 // pagination ===================================================================
 const btnNext = document.querySelector('.btn__next');
@@ -103,6 +110,10 @@ const renderListPage = (arr, perPage) => {
     } else {
         document.querySelector('.btn__prev').setAttribute('style', 'opacity : 1;cursor : pointer');
         document.querySelector('.btn__next').setAttribute('style', 'opacity : 1;cursor : pointer')
+    }
+    if (totalPage == 1) {
+        document.querySelector('.btn__next').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
+        document.querySelector('.btn__prev').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
     }
     // console.log(currentPage, totalPage);
 }
@@ -297,8 +308,18 @@ const title__icon = document.querySelector(".title__icon");
 const bg__big = document.querySelector('.bg--big');
 const btn_addEmployee = document.querySelector('.btn__addEmployee');
 
+
+const modal_name = document.querySelector('.modal_name');
+const modal_email = document.querySelector('.modal_email');
+const modal_id = document.querySelector('.modal_id');
+
+
+
 const closeModal = () => {
     isModalOpen = false;
+    modal_email.value = "";
+    modal_id.value = "";
+    modal_name.value = "";
     modal.setAttribute('style', "display : none");
     bg__big.setAttribute('style', "display : none");
 }
@@ -459,6 +480,7 @@ let findName = document.querySelector('.findByName');
 let findEmail = document.querySelector('.findByEmail');
 findName.onclick = () => {
     if (searchByName(searchInput.value).length) {
+        document.querySelector('.content__right__member-list').classList.add('loading')
         currentPage = 1;
         getCurrentPage(1, getPerPage());
         changePerPage(searchByName(searchInput.value))
@@ -487,6 +509,7 @@ findName.onclick = () => {
 }
 findEmail.onclick = () => {
     if (searchByEmail(searchInput.value).length) {
+        document.querySelector('.content__right__member-list').classList.add('loading')
         currentPage = 1;
         getCurrentPage(1, getPerPage());
         changePerPage(searchByEmail(searchInput.value))
@@ -517,6 +540,7 @@ findEmail.onclick = () => {
 searchInput.onkeypress = (e) => {
     if (e.keyCode == 13) {
         if (search(e.target.value).length) {
+            document.querySelector('.content__right__member-list').classList.add('loading')
             currentPage = 1;
             getCurrentPage(1, getPerPage());
 

@@ -96,8 +96,8 @@
     position: absolute;
     top: auto;
     left: auto;
-    bottom: 8px;
-    right: 8px;
+    bottom: -5px;
+    right: 0;
     padding: 8px 13px;
     font-size: 12px;
     cursor: pointer;
