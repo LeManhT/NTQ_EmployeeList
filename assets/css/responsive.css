@@ -1,0 +1,120 @@
+/* PC */
+@media (min-width: 64em) {}
+
+/* MOBILE AND TABLET */
+@media (max-width: 63.9375em) {
+    .content__left {
+        display: none;
+    }
+
+    .content__right {
+        width: 100%;
+        margin: 0;
+    }
+
+    .panel {
+        margin: 0;
+    }
+
+    .panel {
+        flex-direction: column;
+    }
+}
+
+/*  TABLET */
+@media (min-width: 46.25em) and (max-width: 63.9375em) {
+
+    .filter {
+        display: block;
+    }
+
+    .modal__create {
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .modal__create button {
+        height: 30px;
+        margin: 0;
+        background-color: aquamarine;
+        color: #000;
+        border-color: aquamarine;
+    }
+
+    .btn__filter {
+        width: 40%;
+        display: flex;
+    }
+
+    .filter~button {
+        margin-left: 10px;
+    }
+
+    #content {
+        margin-top: 191.8px;
+    }
+
+    .content__right__member-list {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .member {
+        width: 98%;
+        margin: 4px;
+    }
+}
+
+@media (max-width: 46.1875em) {
+    .input_id {
+        width: 15%;
+    }
+
+    .input_email,
+    .input_job,
+    .input_name {
+        width: 27%;
+    }
+
+
+    .modal__create button {
+        margin: 5px 0;
+        float: right;
+    }
+
+    .btn__filter {
+        width: 30%;
+    }
+
+    .btn__filter button {
+        width: 100%;
+    }
+
+    .filter+button {
+        margin: 10px 0;
+    }
+
+    .filter {
+        display: block;
+    }
+
+    .btn__select {
+        display: none;
+    }
+
+    .btn__filter>button {
+        display: none;
+    }
+
+    #content {
+        margin-top: 209.8px;
+    }
+
+    .content__right__member-list {
+        grid-template-columns: 1fr;
+    }
+
+    .member {
+        width: 100%;
+        margin: 4px 0;
+    }
+}

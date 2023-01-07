@@ -1,0 +1,391 @@
+/* Panel */
+.panel {
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    margin-top: 30px;
+    margin-left: 15%;
+    background-color: #f9f9f9;
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.visible {
+    visibility: visible !important;
+    transition: visibility 0.4s linear 0.2s;
+}
+
+.panel__top,
+.panel__search {
+    flex: 1;
+}
+
+.btn__filter {
+    visibility: hidden;
+}
+
+.panel__search input {
+    width: 100%;
+    padding: 5px;
+    outline: none;
+}
+
+.fa-magnifying-glass-minus {
+    display: none;
+}
+
+.panel__title {
+    color: #777777;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    font-style: italic;
+    font-family: fantasy;
+}
+
+.btn__create button,
+.open__modal button {
+    padding: 5px;
+    box-shadow: inset 0 3px 5px rgb(0 0 0 / 13%);
+    margin-top: 10px;
+}
+
+.open__modal button {
+    background-color: #7c7bad;
+    border: none;
+    height: 30px;
+    padding: 5px 12px;
+    margin-left: 20px;
+}
+
+.btn__add {
+    display: flex;
+}
+
+.btn__create button:hover {
+    cursor: pointer;
+}
+
+
+
+.panel__btn button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px;
+}
+
+.panel__btn button i {
+    font-size: 16px;
+}
+
+.panel__btn button {
+    height: 32px;
+}
+
+.btn__filter>button>i {
+    font-size: 13px;
+    margin: 0 4px;
+}
+
+.panel__btn {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    align-items: center;
+}
+
+.panel__btn button:hover {
+    cursor: pointer;
+}
+
+.btn__pagination button,
+.btn__select-icon,
+.btn__filter button {
+    padding: 0 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn__pagination button:hover {
+    background-color: #ccc;
+    transition: background-color 0.3s ease-in 0.05s;
+}
+
+.btn__pagination+.btn__select {
+    margin-left: 20px;
+}
+
+.search__form {
+    position: relative;
+}
+
+.icon-search {
+    position: absolute;
+    right: 2%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.icon-search:hover {
+    cursor: pointer;
+}
+
+.input_job {
+    padding: 4px 8px;
+    outline: none;
+}
+
+
+
+/* pagination */
+.filter {
+    position: relative;
+    display: inline-block;
+}
+
+.filter__subnav {
+    position: absolute;
+    z-index: 1000;
+    top: 120%;
+    list-style-type: none;
+    background-color: #fff;
+    box-shadow: 0 6px 12px -4px rgb(0 0 0 / 25%);
+    display: none;
+}
+
+.block {
+    display: block;
+}
+
+.filter__subnav>li {
+    height: 28px;
+    padding: 0 30px;
+    line-height: 28px;
+}
+
+.filter__subnav>li:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
+
+.filter__subnav>li+li {
+    border-top: 1px solid #ccc;
+}
+
+.btn__pagination {
+    display: flex;
+    align-items: center;
+}
+
+.pagination {
+    list-style-type: none;
+    margin-right: 20px;
+}
+
+.pagination li a {
+    text-decoration: none;
+    color: #4c4c4c;
+}
+
+
+.bg--big {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: none;
+}
+
+
+.modal_name,
+.modal_id,
+.modal_email {
+    display: block;
+    width: 100%;
+    margin: 20px 0;
+    padding: 5px;
+    outline: none;
+    border: 1px solid #7c7bad;
+}
+
+.modal__title {
+    text-align: center;
+    padding: 20px 0;
+    color: #f9f9f9;
+    font-family: fantasy;
+    letter-spacing: 2px;
+    font-style: italic;
+    background-color: #7c7bad;
+    position: relative;
+}
+
+.title__icon {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #f9f9f9;
+    font-size: 20px;
+}
+
+.title__icon:hover {
+    cursor: pointer;
+}
+
+.modal__body {
+    padding: 0 40px;
+}
+
+
+.modal {
+    /* background-color: #f9f9f9; */
+    width: 50%;
+    margin: auto;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* padding-bottom: 20px; */
+    display: none;
+}
+
+.modal__container {
+    animation: hihi .3s ease-in;
+    background-color: #f9f9f9;
+    padding-bottom: 20px;
+}
+
+@keyframes hihi {
+    from {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn__addEmployee {
+    display: block;
+    background-color: #7c7bad;
+    width: 100%;
+    margin: 10px auto;
+    border: none;
+    height: 30px;
+    font-family: fantasy;
+    color: #f9f9f9;
+    font-size: 16px;
+}
+
+.btn__addEmployee:hover {
+    cursor: pointer;
+}
+
+/* Toast Message */
+#toast {
+    position: fixed;
+    top: 20%;
+    right: 20px;
+    z-index: 999999;
+}
+
+
+.toast {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 2px;
+    padding: 5px 0;
+    min-width: 350px;
+    max-width: 400px;
+    border-left: 4px solid;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
+    transition: all linear 0.5s 0.3s;
+}
+
+@keyframes slideInTop {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+.toast--success {
+    border-color: #47d864;
+}
+
+.toast--success .toast__icon {
+    color: #47d864;
+}
+
+.toast--error {
+    border-color: #ff623d;
+}
+
+.toast--error .toast__icon {
+    color: #ff623d;
+}
+
+.toast+.toast {
+    margin-top: 24px;
+}
+
+.toast__icon {
+    font-size: 24px;
+}
+
+.toast__icon,
+.toast__close {
+    padding: 0 16px;
+}
+
+.toast__body {
+    flex-grow: 1;
+}
+
+.toast__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.toast__msg {
+    font-size: 12px;
+    color: #888;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+.toast__close {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+
+/* per Page */
+.selectPerPage {
+    outline: none;
+    height: 30px;
+}
