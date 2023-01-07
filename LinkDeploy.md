@@ -1,2 +1,2 @@
 # Link deploy
-ntq-employee-list.netlify.app
+[link text itself]: https://ntq-employee-list.netlify.app/
