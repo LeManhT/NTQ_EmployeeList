@@ -579,10 +579,10 @@ const sortNameReverse = (arr) => {
     btnPrev.onclick = () => { renderDecrease(arr, getPerPage()) }
 }
 btnAZ.onclick = () => {
-    sortName(EMPLOYEES)
+    sortName(listEmployees)
 }
 
 btnZA.onclick = () => {
-    sortNameReverse(EMPLOYEES)
+    sortNameReverse(listEmployees)
 }
 
