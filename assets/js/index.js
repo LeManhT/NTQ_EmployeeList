@@ -104,23 +104,23 @@ const getCurrentPage = (currentPage, perPage) => {
 }
 
 const renderListPage = (arr, perPage) => {
-    let totalPage
+    let totalPage;
     if (!arr.length) {
         getCurrentPage(1, getPerPage())
         totalPage = 1;
     } else {
         totalPage = Math.ceil(arr.length / perPage);
-        let pagItem = document.querySelector('.pagination');
-        let html = ` <li class="pagination-item">
-    <a href="" class="pagination-item__link">Page ${currentPage}/${totalPage}</a>
-</li>`;
-        for (let i = 2; i <= totalPage; i++) {
-            html = ` <li class="pagination-item">
-    <a href="" class="pagination-item__link">Page ${currentPage}/${totalPage}</a>
-</li>`;
-        }
-        pagItem.innerHTML = html;
     }
+    let pagItem = document.querySelector('.pagination');
+    let html = ` <li class="pagination-item">
+<a href="" class="pagination-item__link">Page ${currentPage}/${totalPage}</a>
+</li>`;
+    for (let i = 2; i <= totalPage; i++) {
+        html = ` <li class="pagination-item">
+<a href="" class="pagination-item__link">Page ${currentPage}/${totalPage}</a>
+</li>`;
+    }
+    pagItem.innerHTML = html;
     if (currentPage === totalPage) {
         document.querySelector('.btn__next').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
         document.querySelector('.btn__prev').setAttribute('style', 'opacity : 1;cursor : pointer');
