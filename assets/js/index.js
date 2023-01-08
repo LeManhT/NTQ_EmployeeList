@@ -8,21 +8,6 @@ const getPerPage = () => {
     return selectPerPage.value;
 }
 
-const debounce = (fn, delay) => {
-    delay = delay || 0; // Neu delay ko co gtri thi set = 0
-    let timerId;
-    console.log('timeId : ', timerId);
-    return () => {
-        if (timerId) {
-            clearTimeout(timerId);
-            timerId = null;
-        } else {
-            timerId = setTimeout(() => {
-                fn();
-            }, delay);
-        }
-    }
-}
 // No search result
 
 const noSearch = `<div class="noSearch">
@@ -104,12 +89,14 @@ const getCurrentPage = (currentPage, perPage) => {
 }
 
 const renderListPage = (arr, perPage) => {
+    console.log(arr.length);
     let totalPage;
     if (!arr.length) {
-        getCurrentPage(1, getPerPage())
         totalPage = 1;
+        // currentPage = 1;
     } else {
         totalPage = Math.ceil(arr.length / perPage);
+        getCurrentPage(1, getPerPage())
     }
     let pagItem = document.querySelector('.pagination');
     let html = ` <li class="pagination-item">
@@ -148,6 +135,7 @@ const renderIncrease = (arr, perPage) => {
     }
     if (!arr.length) {
         totalPage = 1;
+        getCurrentPage(1, getPerPage());
     } else {
         getCurrentPage(currentPage, getPerPage());
         listRender = [...arr.slice(start, end)]
@@ -158,13 +146,16 @@ const renderIncrease = (arr, perPage) => {
 
 
 const renderDecrease = (arr) => {
+    let totalPage;
     currentPage--;
     if (currentPage <= 1) {
         currentPage = 1;
     }
     if (!arr.length) {
         totalPage = 1;
+        getCurrentPage(1, getPerPage());
     } else {
+        totalPage = Math.ceil(arr.length / perPage);
         getCurrentPage(currentPage, getPerPage());
         listRender = [...arr.slice(start, end)]
         render(listRender);
@@ -181,6 +172,8 @@ const changePerPage = (arr) => {
     getCurrentPage(1, getPerPage());
     render(arr.slice(start, end));
     renderListPage(arr, getPerPage());
+    btnNext.onclick = () => { renderIncrease(arr, getPerPage()) }
+    btnPrev.onclick = () => { renderDecrease(arr, getPerPage()) }
 }
 selectPerPage.onchange = () => { changePerPage(listEmployees) }
 
@@ -510,67 +503,50 @@ searchInput.addEventListener('keyup', (e) => {
 
 });
 
+const handleSearching = (arr) => {
+    document.querySelector('.content__right__member-list').classList.add('loading')
+    currentPage = 1;
+    getCurrentPage(1, getPerPage());
+    changePerPage(arr)
+    selectPerPage.onchange = () => { changePerPage(arr) }
+    sortByName(arr);
+    sortByNameReverse(arr);
+    dropDown.setAttribute('style', 'display : none');
+    memberList.setAttribute('style', 'display : grid');
+    rightNoData.setAttribute('style', 'display : none');
+    btnAZ.onclick = () => {
+        sortName(arr)
+    }
+
+    btnZA.onclick = () => {
+        sortNameReverse(arr)
+    }
+}
+
+const handleNoData = () => {
+    changePerPage([])
+    selectPerPage.onchange = () => { changePerPage([]) }
+    rightNoData.setAttribute('style', 'display : block');
+    dropDown.setAttribute('style', 'display : none');
+    memberList.setAttribute('style', 'display : none');
+}
+
 
 let findName = document.querySelector('.findByName');
 let findEmail = document.querySelector('.findByEmail');
 findName.onclick = () => {
     if (searchByName(searchInput.value).length) {
-        document.querySelector('.content__right__member-list').classList.add('loading')
-        currentPage = 1;
-        getCurrentPage(1, getPerPage());
-        changePerPage(searchByName(searchInput.value))
-        selectPerPage.onchange = () => { changePerPage(searchByName(searchInput.value)) }
-        sortByName(searchByName(searchInput.value));
-        sortByNameReverse(searchByName(searchInput.value));
-        dropDown.setAttribute('style', 'display : none');
-        btnNext.onclick = () => { renderIncrease(searchByName(searchInput.value), getPerPage()); }
-        btnPrev.onclick = () => { renderDecrease(searchByName(searchInput.value), getPerPage()) };
-        memberList.setAttribute('style', 'display : grid');
-        rightNoData.setAttribute('style', 'display : none');
-        btnAZ.onclick = () => {
-            sortName(searchByName(searchInput.value))
-        }
-
-        btnZA.onclick = () => {
-            sortNameReverse(searchByName(searchInput.value))
-        }
-
+        handleSearching(searchByName(searchInput.value))
     } else {
-        changePerPage([]);
-        btnNext.onclick = () => { renderIncrease([], getPerPage()); }
-        btnPrev.onclick = () => { renderDecrease([], getPerPage()) };
-        rightNoData.setAttribute('style', 'display : block');
-        dropDown.setAttribute('style', 'display : none');
-        memberList.setAttribute('style', 'display : none');
+        handleNoData();
     }
 
 }
 findEmail.onclick = () => {
     if (searchByEmail(searchInput.value).length) {
-        document.querySelector('.content__right__member-list').classList.add('loading')
-        currentPage = 1;
-        getCurrentPage(1, getPerPage());
-        changePerPage(searchByEmail(searchInput.value))
-        selectPerPage.onchange = () => { changePerPage(searchByEmail(searchInput.value)) }
-        sortByName(searchByEmail(searchInput.value));
-        sortByNameReverse(searchByEmail(searchInput.value));
-        dropDown.setAttribute('style', 'display : none');
-        btnNext.onclick = () => { renderIncrease(searchByEmail(searchInput.value), getPerPage()) }
-        btnPrev.onclick = () => { renderDecrease(searchByEmail(searchInput.value), getPerPage()) }
-        memberList.setAttribute('style', 'display : grid');
-        rightNoData.setAttribute('style', 'display : none');
-        btnAZ.onclick = () => {
-            sortName(searchByEmail(searchInput.value))
-        }
-
-        btnZA.onclick = () => {
-            sortNameReverse(searchByEmail(searchInput.value))
-        }
-
+        handleSearching(searchByEmail(searchInput.value))
     } else {
-        rightNoData.setAttribute('style', 'display : block');
-        dropDown.setAttribute('style', 'display : none');
-        memberList.setAttribute('style', 'display : none');
+        handleNoData();
     }
 
 }
@@ -578,31 +554,9 @@ findEmail.onclick = () => {
 searchInput.onkeypress = (e) => {
     if (e.keyCode == 13) {
         if (search(e.target.value).length) {
-            document.querySelector('.content__right__member-list').classList.add('loading')
-            currentPage = 1;
-            getCurrentPage(1, getPerPage());
-
-            changePerPage(search(e.target.value))
-            selectPerPage.onchange = () => { changePerPage(search(e.target.value)) }
-            sortByName(search(e.target.value));
-            sortByNameReverse(search(e.target.value));
-            dropDown.setAttribute('style', 'display : none');
-            btnNext.onclick = () => { renderIncrease(search(e.target.value), getPerPage()); }
-            btnPrev.onclick = () => { renderDecrease(search(e.target.value), getPerPage()) };
-            btnAZ.onclick = () => {
-                sortName(search(e.target.value));
-            }
-
-            btnZA.onclick = () => {
-                sortNameReverse(search(e.target.value))
-            }
-
-            memberList.setAttribute('style', 'display : grid');
-            rightNoData.setAttribute('style', 'display : none');
+            handleSearching(search(e.target.value))
         } else {
-            rightNoData.setAttribute('style', 'display : block');
-            dropDown.setAttribute('style', 'display : none');
-            memberList.setAttribute('style', 'display : none');
+            handleNoData();
         }
 
     }
