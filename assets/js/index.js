@@ -8,6 +8,21 @@ const getPerPage = () => {
     return selectPerPage.value;
 }
 
+const debounce = (fn, delay) => {
+    delay = delay || 0; // Neu delay ko co gtri thi set = 0
+    let timerId;
+    console.log('timeId : ', timerId);
+    return () => {
+        if (timerId) {
+            clearTimeout(timerId);
+            timerId = null;
+        } else {
+            timerId = setTimeout(() => {
+                fn();
+            }, delay);
+        }
+    }
+}
 // No search result
 
 const noSearch = `<div class="noSearch">
@@ -89,18 +104,23 @@ const getCurrentPage = (currentPage, perPage) => {
 }
 
 const renderListPage = (arr, perPage) => {
-    let totalPage = Math.ceil(arr.length / perPage);
-    let pagItem = document.querySelector('.pagination');
-    let html = ` <li class="pagination-item">
+    let totalPage
+    if (!arr.length) {
+        getCurrentPage(1, getPerPage())
+        totalPage = 1;
+    } else {
+        totalPage = Math.ceil(arr.length / perPage);
+        let pagItem = document.querySelector('.pagination');
+        let html = ` <li class="pagination-item">
     <a href="" class="pagination-item__link">Page ${currentPage}/${totalPage}</a>
 </li>`;
-    for (let i = 2; i <= totalPage; i++) {
-        html = ` <li class="pagination-item">
+        for (let i = 2; i <= totalPage; i++) {
+            html = ` <li class="pagination-item">
     <a href="" class="pagination-item__link">Page ${currentPage}/${totalPage}</a>
 </li>`;
+        }
+        pagItem.innerHTML = html;
     }
-    pagItem.innerHTML = html;
-
     if (currentPage === totalPage) {
         document.querySelector('.btn__next').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
         document.querySelector('.btn__prev').setAttribute('style', 'opacity : 1;cursor : pointer');
@@ -126,10 +146,14 @@ const renderIncrease = (arr, perPage) => {
     if (currentPage > totalPage) {
         currentPage = totalPage;
     }
-    getCurrentPage(currentPage, getPerPage());
-    listRender = [...arr.slice(start, end)]
-    render(listRender);
-    renderListPage(arr, getPerPage());
+    if (!arr.length) {
+        totalPage = 1;
+    } else {
+        getCurrentPage(currentPage, getPerPage());
+        listRender = [...arr.slice(start, end)]
+        render(listRender);
+        renderListPage(arr, getPerPage());
+    }
 }
 
 
@@ -138,10 +162,14 @@ const renderDecrease = (arr) => {
     if (currentPage <= 1) {
         currentPage = 1;
     }
-    getCurrentPage(currentPage, getPerPage());
-    listRender = [...arr.slice(start, end)]
-    render(listRender);
-    renderListPage(arr, getPerPage());
+    if (!arr.length) {
+        totalPage = 1;
+    } else {
+        getCurrentPage(currentPage, getPerPage());
+        listRender = [...arr.slice(start, end)]
+        render(listRender);
+        renderListPage(arr, getPerPage());
+    }
 }
 
 btnNext.onclick = () => { renderIncrease(listEmployees, getPerPage()); }
@@ -229,6 +257,7 @@ const createEmail = (name) => {
     let employeeSplitName = createNameEmail(name);
     const equivalentName = [];
     const arrNumber = [];
+
     EMPLOYEES.forEach((employee) => {
         const employeeEmail = employee.email.match(/^(.+)@/)[1].match(regex).join('');
         let matchesNumber = employee.email.match(/^(.+)@/)[1].match(/(\d+)/);
@@ -363,10 +392,16 @@ modalName.onkeyup = () => { keyUpName('modal_email', 'modal_id', modalName); }
 
 // On blur email input==============================================
 
-
 const inputName = document.querySelector('.input_name');
-inputName.onkeyup = () => { keyUpName('input_email', 'input_id', inputName); };
-
+let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+inputName.onkeyup = () => {
+    if (Number(inputName.value) || format.test(inputName.value) || inputName.value.startsWith(" ")) {
+        alert("You are not permitted to type number for name !");
+        return;
+    } else {
+        keyUpName('input_email', 'input_id', inputName);
+    };
+}
 // Toast message
 const toast = ({ title = "", message = "", type = "success", duration = 3000 }) => {
     const main = document.getElementById("toast");
@@ -501,6 +536,9 @@ findName.onclick = () => {
         }
 
     } else {
+        changePerPage([]);
+        btnNext.onclick = () => { renderIncrease([], getPerPage()); }
+        btnPrev.onclick = () => { renderDecrease([], getPerPage()) };
         rightNoData.setAttribute('style', 'display : block');
         dropDown.setAttribute('style', 'display : none');
         memberList.setAttribute('style', 'display : none');
