@@ -89,7 +89,7 @@ const getCurrentPage = (currentPage, perPage) => {
 }
 
 const renderListPage = (arr, perPage) => {
-    console.log(arr.length);
+    // console.log(arr.length);
     let totalPage;
     if (!arr.length) {
         totalPage = 1;
@@ -299,7 +299,7 @@ const handleAddEmployee = (arr, nameVal, jobVal, emailVal, idVal) => {
             arr.unshift({
                 id: createId(),
                 name: inputName,
-                email: createEmail(inputName),
+                email: emailValue,
                 job: inputJob
             })
             // console.log(listEmployees.length);
@@ -369,11 +369,14 @@ modal.onclick = (e) => {
 btn_addEmployee.onclick = () => {
     handleAddEmployee(EMPLOYEES, 'modal_name', 'modal_job', 'modal_email', 'modal_id');
 }
+let emailValue;
 const keyUpName = (emailVal, idVal, inputRoot) => {
     const inputEmail = document.querySelector(`.${emailVal}`);
     const inputId = document.querySelector(`.${idVal}`);
     if (inputRoot.value) {
         inputEmail.value = createEmail(inputRoot.value);
+        emailValue = inputEmail.value;
+        // console.log(inputEmail.value, 377);
         inputId.value = createId();
     } else {
         inputEmail.value = '';
@@ -389,7 +392,7 @@ const inputName = document.querySelector('.input_name');
 let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 inputName.onkeyup = () => {
     if (Number(inputName.value) || format.test(inputName.value) || inputName.value.startsWith(" ")) {
-        alert("You are not permitted to type number for name !");
+        alert("You are not permitted to type number or special characters for name !");
         return;
     } else {
         keyUpName('input_email', 'input_id', inputName);
