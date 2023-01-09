@@ -145,8 +145,8 @@ const renderIncrease = (arr, perPage) => {
 }
 
 
-const renderDecrease = (arr) => {
-    let totalPage;
+const renderDecrease = (arr, perPage) => {
+    let totalPage = Math.ceil(arr.length / perPage);
     currentPage--;
     if (currentPage <= 1) {
         currentPage = 1;
@@ -155,7 +155,6 @@ const renderDecrease = (arr) => {
         totalPage = 1;
         getCurrentPage(1, getPerPage());
     } else {
-        totalPage = Math.ceil(arr.length / perPage);
         getCurrentPage(currentPage, getPerPage());
         listRender = [...arr.slice(start, end)]
         render(listRender);
@@ -328,7 +327,7 @@ const modal = document.querySelector('.modal');
 const open__modal = document.querySelector(".open__modal button");
 const title__icon = document.querySelector(".title__icon");
 const bg__big = document.querySelector('.bg--big');
-const btn_addEmployee = document.querySelector('.btn__addEmployee');
+const btn__addEmployee = document.querySelector('.btn__addEmployee');
 
 
 const modal_name = document.querySelector('.modal_name');
@@ -366,7 +365,7 @@ modal.onclick = (e) => {
     e.stopPropagation();
 }
 
-btn_addEmployee.onclick = () => {
+btn__addEmployee.onclick = () => {
     handleAddEmployee(EMPLOYEES, 'modal_name', 'modal_job', 'modal_email', 'modal_id');
 }
 let emailValue;
@@ -392,7 +391,7 @@ const inputName = document.querySelector('.input_name');
 let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 inputName.onkeyup = () => {
     if (Number(inputName.value) || format.test(inputName.value) || inputName.value.startsWith(" ")) {
-        alert("You are not permitted to type number or special characters for name !");
+        alert("You are not permitted to type number or special  for name !");
         return;
     } else {
         keyUpName('input_email', 'input_id', inputName);
