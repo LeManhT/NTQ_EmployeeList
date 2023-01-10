@@ -1,5 +1,57 @@
 import { EMPLOYEES } from '../data/data.js'
 
+
+// Declare
+
+// pagination
+let pagItem = document.querySelector('.pagination');
+const btnNext = document.querySelector('.btn__next');
+const btnPrev = document.querySelector('.btn__prev');
+// let perPage = 40;
+
+
+// Search
+const searchInput = document.querySelector('.search__input');
+
+const plusSearch = document.querySelector('.fa-magnifying-glass-plus');
+const minusSearch = document.querySelector('.fa-magnifying-glass-minus')
+const btnFilter = document.querySelector('.btn__filter');
+const iconSearch = document.querySelector('.icon-search');
+let count = true;
+
+
+// Search by email
+const dropDown = document.querySelector('.dropDown');
+
+// Search name
+let findName = document.querySelector('.findByName');
+let findEmail = document.querySelector('.findByEmail');
+
+// On key up input
+
+const inputName = document.querySelector('.input_name');
+
+
+// Modal add
+const modal = document.querySelector('.modal');
+const open__modal = document.querySelector(".open__modal button");
+const title__icon = document.querySelector(".title__icon");
+const bg__big = document.querySelector('.bg--big');
+const btn__addEmployee = document.querySelector('.btn__addEmployee');
+
+
+const modal_name = document.querySelector('.modal_name');
+const modal_email = document.querySelector('.modal_email');
+const modal_id = document.querySelector('.modal_id');
+
+const modalName = document.querySelector('.modal_name');
+
+
+// Sort
+const btnSort = document.querySelector('.btn__filter--sort');
+const filterSubnav = document.querySelector('.filter__subnav');
+
+
 const listEmployees = structuredClone(EMPLOYEES);
 let listRender = [];
 let isSkeleton = true;
@@ -7,6 +59,11 @@ const selectPerPage = document.querySelector('.selectPerPage');
 const getPerPage = () => {
     return selectPerPage.value;
 }
+
+// btnAZ, ZA
+
+const btnAZ = document.querySelector('.btnAZ');
+const btnZA = document.querySelector('.btnZA');
 
 // No search result
 
@@ -16,6 +73,11 @@ const noSearch = `<div class="noSearch">
 </div>`;
 const rightNoData = document.querySelector('.content__right--noData');
 rightNoData.innerHTML = noSearch;
+
+// pagination
+let currentPage = 1;
+let start = 0;
+let end = getPerPage();
 
 const memberList = document.querySelector('.content__right__member-list');
 const render = (arr) => {
@@ -68,17 +130,12 @@ const render = (arr) => {
 
     if (isSkeleton) {
         setTimeout(() => {
-            document.querySelector('.content__right__member-list').classList.remove('loading')
+            memberList.classList.remove('loading')
         }, 1000)
     }
 }
 // pagination ===================================================================
-const btnNext = document.querySelector('.btn__next');
-const btnPrev = document.querySelector('.btn__prev');
-// let perPage = 40;
-let currentPage = 1;
-let start = 0;
-let end = getPerPage();
+
 // let totalPage = Math.ceil(listEmployees.length / perPage);
 render([...listEmployees.slice(start, end)]);
 
@@ -98,7 +155,6 @@ const renderListPage = (arr, perPage) => {
         totalPage = Math.ceil(arr.length / perPage);
         getCurrentPage(1, getPerPage())
     }
-    let pagItem = document.querySelector('.pagination');
     let html = ` <li class="pagination-item">
 <a href="" class="pagination-item__link">Page ${currentPage}/${totalPage}</a>
 </li>`;
@@ -109,18 +165,18 @@ const renderListPage = (arr, perPage) => {
     }
     pagItem.innerHTML = html;
     if (currentPage === totalPage) {
-        document.querySelector('.btn__next').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
-        document.querySelector('.btn__prev').setAttribute('style', 'opacity : 1;cursor : pointer');
+        btnNext.setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
+        btnPrev.setAttribute('style', 'opacity : 1;cursor : pointer');
     } else if (currentPage <= 1) {
-        document.querySelector('.btn__prev').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
-        document.querySelector('.btn__next').setAttribute('style', 'opacity : 1;cursor : pointer');
+        btnPrev.setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
+        btnNext.setAttribute('style', 'opacity : 1;cursor : pointer');
     } else {
-        document.querySelector('.btn__prev').setAttribute('style', 'opacity : 1;cursor : pointer');
-        document.querySelector('.btn__next').setAttribute('style', 'opacity : 1;cursor : pointer')
+        btnPrev.setAttribute('style', 'opacity : 1;cursor : pointer');
+        btnNext.setAttribute('style', 'opacity : 1;cursor : pointer')
     }
     if (totalPage == 1) {
-        document.querySelector('.btn__next').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
-        document.querySelector('.btn__prev').setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
+        btnNext.setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
+        btnPrev.setAttribute('style', 'opacity : 0.5;cursor : not-allowed');
     }
     // console.log(currentPage, totalPage);
 }
@@ -169,7 +225,7 @@ btnPrev.onclick = () => { renderDecrease(listEmployees, getPerPage()) }
 const changePerPage = (arr) => {
     currentPage = 1;
     getCurrentPage(1, getPerPage());
-    render(arr.slice(start, end));
+    render([...arr.slice(start, end)]);
     renderListPage(arr, getPerPage());
     btnNext.onclick = () => { renderIncrease(arr, getPerPage()) }
     btnPrev.onclick = () => { renderDecrease(arr, getPerPage()) }
@@ -178,11 +234,7 @@ selectPerPage.onchange = () => { changePerPage(listEmployees) }
 
 // Search =======================================================================
 
-const plusSearch = document.querySelector('.fa-magnifying-glass-plus');
-const minusSearch = document.querySelector('.fa-magnifying-glass-minus')
-const btnFilter = document.querySelector('.btn__filter');
-const iconSearch = document.querySelector('.icon-search');
-let count = true;
+
 iconSearch.onclick = () => {
     if (count) {
         minusSearch.setAttribute('style', 'display : block');
@@ -201,8 +253,7 @@ iconSearch.onclick = () => {
 
 
 
-const btnSort = document.querySelector('.btn__filter--sort');
-const filterSubnav = document.querySelector('.filter__subnav');
+
 btnSort.onclick = () => {
     filterSubnav.classList.toggle('block');
 }
@@ -250,7 +301,7 @@ const createEmail = (name) => {
     const equivalentName = [];
     const arrNumber = [];
 
-    EMPLOYEES.forEach((employee) => {
+    listEmployees.forEach((employee) => {
         const employeeEmail = employee.email.match(/^(.+)@/)[1].match(regex).join('');
         let matchesNumber = employee.email.match(/^(.+)@/)[1].match(/(\d+)/);
         if (employeeSplitName === employeeEmail) {
@@ -272,7 +323,7 @@ const createEmail = (name) => {
 // console.log(createEmail('Nguyễn Hoàng Hải'));
 const createId = () => {
     let maxId = listEmployees[0].id;
-    EMPLOYEES.forEach((employee) => {
+    listEmployees.forEach((employee) => {
         if (maxId < employee.id) {
             maxId = employee.id;
         }
@@ -319,21 +370,10 @@ const handleAddEmployee = (arr, nameVal, jobVal, emailVal, idVal) => {
 
 btnAdd.onclick = (event) => {
     event.preventDefault();
-    handleAddEmployee(EMPLOYEES, 'input_name', 'input_job', 'input_email', 'input_id');
+    handleAddEmployee(listEmployees, 'input_name', 'input_job', 'input_email', 'input_id');
 }
 
 // add employee
-const modal = document.querySelector('.modal');
-const open__modal = document.querySelector(".open__modal button");
-const title__icon = document.querySelector(".title__icon");
-const bg__big = document.querySelector('.bg--big');
-const btn__addEmployee = document.querySelector('.btn__addEmployee');
-
-
-const modal_name = document.querySelector('.modal_name');
-const modal_email = document.querySelector('.modal_email');
-const modal_id = document.querySelector('.modal_id');
-
 
 
 const closeModal = () => {
@@ -366,7 +406,7 @@ modal.onclick = (e) => {
 }
 
 btn__addEmployee.onclick = () => {
-    handleAddEmployee(EMPLOYEES, 'modal_name', 'modal_job', 'modal_email', 'modal_id');
+    handleAddEmployee(listEmployees, 'modal_name', 'modal_job', 'modal_email', 'modal_id');
 }
 let emailValue;
 const keyUpName = (emailVal, idVal, inputRoot) => {
@@ -382,15 +422,20 @@ const keyUpName = (emailVal, idVal, inputRoot) => {
         inputId.value = '';
     }
 }
-const modalName = document.querySelector('.modal_name');
 modalName.onkeyup = () => { keyUpName('modal_email', 'modal_id', modalName); }
 
 // On blur email input==============================================
+const checkHasNumber = (val) => {
+    const matches = val.match(/\d+/g);
+    if (matches != null) {
+        return true;
+    }
+}
 
-const inputName = document.querySelector('.input_name');
+
 let format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 inputName.onkeyup = () => {
-    if (Number(inputName.value) || format.test(inputName.value) || inputName.value.startsWith(" ")) {
+    if (Number(inputName.value) || format.test(inputName.value) || inputName.value.startsWith(" ") || checkHasNumber(inputName.value)) {
         alert("You are not permitted to type number or special  for name !");
         return;
     } else {
@@ -461,7 +506,6 @@ const showErrorToast = () => {
 }
 // Find by Name , Email===========================================================
 
-const searchInput = document.querySelector('.search__input');
 const searchByName = (searchName) => {
     const listResult = listEmployees.filter((employee) => {
         if (employee.name.includes(searchName)) {
@@ -473,7 +517,7 @@ const searchByName = (searchName) => {
 
 // console.log(searchByName('Nam'));
 const search = (searchValue) => {
-    const listResult = EMPLOYEES.filter((employee) => {
+    const listResult = listEmployees.filter((employee) => {
         if (employee.name.toLowerCase().includes(searchValue.toLowerCase()) || employee.email.includes(searchValue.toLowerCase()) || employee.job.toLowerCase().includes(searchValue.toLowerCase())) {
             return true;
         }
@@ -483,7 +527,7 @@ const search = (searchValue) => {
 // Search by Email
 
 const searchByEmail = (email) => {
-    const listResult = EMPLOYEES.filter((employee) => {
+    const listResult = listEmployees.filter((employee) => {
         const employeeEmail = employee.email ? employee.email.match(/^(.+)@/)[1] : '';
         if (employee.email ? employee.email.includes(email) : null || employee.email ? employee.email.includes(employeeEmail) : null) {
             return true;
@@ -494,7 +538,6 @@ const searchByEmail = (email) => {
 
 // console.log(searchByEmail("duy.do"));
 // console.log(searchByName("Duy"));
-const dropDown = document.querySelector('.dropDown');
 searchInput.addEventListener('keyup', (e) => {
     if (e.keyCode !== 13) {
         dropDown.setAttribute('style', 'display : block');
@@ -506,22 +549,23 @@ searchInput.addEventListener('keyup', (e) => {
 });
 
 const handleSearching = (arr) => {
-    document.querySelector('.content__right__member-list').classList.add('loading')
+    memberList.classList.add('loading')
     currentPage = 1;
     getCurrentPage(1, getPerPage());
     changePerPage(arr)
     selectPerPage.onchange = () => { changePerPage(arr) }
-    sortByName(arr);
-    sortByNameReverse(arr);
     dropDown.setAttribute('style', 'display : none');
     memberList.setAttribute('style', 'display : grid');
     rightNoData.setAttribute('style', 'display : none');
     btnAZ.onclick = () => {
         sortName(arr)
+        sortByName(arr);
+
     }
 
     btnZA.onclick = () => {
-        sortNameReverse(arr)
+        sortNameReverse(arr);
+        sortByNameReverse(arr);
     }
 }
 
@@ -534,8 +578,7 @@ const handleNoData = () => {
 }
 
 
-let findName = document.querySelector('.findByName');
-let findEmail = document.querySelector('.findByEmail');
+
 findName.onclick = () => {
     if (searchByName(searchInput.value).length) {
         handleSearching(searchByName(searchInput.value))
@@ -580,8 +623,7 @@ const sortByNameReverse = (arr) => {
     return result;
 }
 
-const btnAZ = document.querySelector('.btnAZ');
-const btnZA = document.querySelector('.btnZA');
+
 
 const sortName = (arr) => {
     render([...sortByName(arr).slice(start, end)]);
@@ -597,10 +639,10 @@ const sortNameReverse = (arr) => {
     btnPrev.onclick = () => { renderDecrease(arr, getPerPage()) }
 }
 btnAZ.onclick = () => {
-    sortName(listEmployees)
+    sortName([...listEmployees])
 }
 
 btnZA.onclick = () => {
-    sortNameReverse(listEmployees)
+    sortNameReverse([...listEmployees])
 }
 
